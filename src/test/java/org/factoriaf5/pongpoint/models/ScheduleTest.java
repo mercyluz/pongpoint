@@ -3,65 +3,79 @@ package org.factoriaf5.pongpoint.models;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.time.LocalTime;
-import java.time.LocalDate;
-
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
+
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ScheduleTest {
 
     private Schedule schedule;
+    private TennisTable mockTable;
+    private Reservation mockReservation;
 
-    // Este método se ejecuta antes de cada prueba para inicializar el objeto Schedule
     @BeforeEach
     public void setUp() {
-        // Inicializamos el objeto Schedule con parámetros válidos
-        schedule = new Schedule(1L, LocalTime.of(10, 0), LocalTime.of(12, 0), LocalDate.of(2024, 12, 1));
+        // Creamos mocks de las dependencias
+        mockTable = mock(TennisTable.class);
+
+        // Creamos la instancia de Schedule
+        schedule = new Schedule(LocalDateTime.now(), LocalDateTime.now().plusHours(1), true, mockTable);
+
+        // También podemos crear una lista de reservas
+        mockReservation = mock(Reservation.class);
+        List<Reservation> reservations = new ArrayList<>();
+        reservations.add(mockReservation);
+
+        schedule.setReservations(reservations);
     }
 
-    // Test para el constructor vacío (sin parámetros)
     @Test
-    public void testConstructorEmpty() {
-        // Usamos el constructor vacío
-        Schedule emptySchedule = new Schedule(0L, null);
-
-        // Verificamos que los valores del objeto creado sean los esperados (nulos o por defecto)
-        assertNull(emptySchedule.getStartTime(), "La hora de inicio debe ser nula");
-        assertNull(emptySchedule.getEndTime(), "La hora de finalización debe ser nula");
-        assertNull(emptySchedule.getDate(), "La fecha debe ser nula");
+    public void testScheduleConstructor() {
+        assertNotNull(schedule);
+        assertEquals(mockTable, schedule.getTable());
+        assertNotNull(schedule.getStartDateTime());
+        assertNotNull(schedule.getEndDateTime());
+        assertTrue(schedule.getAvailable());
     }
 
-    // Test para el constructor con parámetros
-    @Test
-    public void testConstructorWithParameters() {
-        // Verificamos que los valores se asignen correctamente
-        assertEquals(1L, schedule.getScheduleId(), "El ID del horario no es correcto");
-        assertEquals(LocalTime.of(10, 0), schedule.getStartTime(), "La hora de inicio no es correcta");
-        assertEquals(LocalTime.of(12, 0), schedule.getEndTime(), "La hora de finalización no es correcta");
-        assertEquals(LocalDate.of(2024, 12, 1), schedule.getDate(), "La fecha no es correcta");
-    }
-
-    // Test para los métodos Setters y Getters
     @Test
     public void testSettersAndGetters() {
-        // Usamos los setters para cambiar los valores
-        schedule.setScheduleId(2L);
-        schedule.setStartTime(LocalTime.of(14, 0));
-        schedule.setEndTime(LocalTime.of(16, 0));
-        schedule.setDate(LocalDate.of(2024, 12, 2));
+        schedule.setAvailable(false);
+        schedule.setStartDateTime(LocalDateTime.now().plusHours(1));
+        schedule.setEndDateTime(LocalDateTime.now().plusHours(2));
 
-        // Verificamos que los valores se hayan actualizado correctamente
-        assertEquals(2L, schedule.getScheduleId(), "El ID del horario no se actualizó correctamente");
-        assertEquals(LocalTime.of(14, 0), schedule.getStartTime(), "La hora de inicio no se actualizó correctamente");
-        assertEquals(LocalTime.of(16, 0), schedule.getEndTime(), "La hora de finalización no se actualizó correctamente");
-        assertEquals(LocalDate.of(2024, 12, 2), schedule.getDate(), "La fecha no se actualizó correctamente");
+        assertFalse(schedule.getAvailable());
+        assertNotNull(schedule.getStartDateTime());
+        assertNotNull(schedule.getEndDateTime());
     }
 
-    // Test para el método toString
     @Test
-    public void testToString() {
-        // Verificamos que el método toString devuelve el formato correcto
-        String expected = "Schedule [scheduleId=1, startTime=10:00, endTime=12:00, date=2024-12-01]";
-        assertEquals(expected, schedule.toString(), "El método toString no devuelve el formato esperado");
+    public void testReservations() {
+        List<Reservation> reservations = schedule.getReservations();
+        assertEquals(1, reservations.size());
+        assertEquals(mockReservation, reservations.get(0));
+    }
+
+    @Test
+    public void testTableSetter() {
+        TennisTable newTable = mock(TennisTable.class);
+        schedule.setTable(newTable);
+
+        assertEquals(newTable, schedule.getTable());
+    }
+
+    @Test
+    public void testStartAndEndDate() {
+        LocalDateTime startDate = LocalDateTime.of(2024, 12, 9, 10, 0);
+        LocalDateTime endDate = startDate.plusHours(2);
+
+        schedule.setStartDateTime(startDate);
+        schedule.setEndDateTime(endDate);
+
+        assertEquals(startDate, schedule.getStartDateTime());
+        assertEquals(endDate, schedule.getEndDateTime());
     }
 }

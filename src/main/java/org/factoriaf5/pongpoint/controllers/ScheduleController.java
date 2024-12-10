@@ -3,6 +3,7 @@ package org.factoriaf5.pongpoint.controllers;
 import org.factoriaf5.pongpoint.models.Schedule;
 import org.factoriaf5.pongpoint.services.ScheduleService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,61 +16,50 @@ public class ScheduleController {
     @Autowired
     private ScheduleService scheduleService;
 
-    // Obtener todos los horarios disponibles
-    @GetMapping
-    public ResponseEntity<List<Schedule>> getAllSchedules() {
-        List<Schedule> schedules = scheduleService.getAllSchedules();
-        if (schedules.isEmpty()) {
-            return ResponseEntity.noContent().build();
-        }
-        return ResponseEntity.ok(schedules);
-    }
-
-    // Obtener los horarios disponibles para una mesa específica
-    @GetMapping("/table/{tableId}")
-    public ResponseEntity<List<Schedule>> getSchedulesByTable(@PathVariable Long tableId) {
-        List<Schedule> schedules = scheduleService.getSchedulesByTable(tableId);
-        if (schedules.isEmpty()) {
-            return ResponseEntity.noContent().build();
-        }
-        return ResponseEntity.ok(schedules);
-    }
-
-    // Obtener un horario específico por ID
-    @GetMapping("/{id}")
-    public ResponseEntity<Schedule> getScheduleById(@PathVariable Long id) {
-        Schedule schedule = scheduleService.getScheduleById(id);
-        if (schedule == null) {
-            return ResponseEntity.notFound().build();
-        }
-        return ResponseEntity.ok(schedule);
-    }
-
-
-    // Crear un nuevo horario
+    // Crear un nuevo schedule
     @PostMapping
     public ResponseEntity<Schedule> createSchedule(@RequestBody Schedule schedule) {
         Schedule newSchedule = scheduleService.createSchedule(schedule);
-        return ResponseEntity.status(201).body(newSchedule);
+        return new ResponseEntity<>(newSchedule, HttpStatus.CREATED);
     }
 
-    // Actualizar la disponibilidad de un horario
-    @PutMapping("/{id}")
-    public ResponseEntity<Schedule> updateScheduleAvailability(@PathVariable Long id, @RequestBody Boolean available) {
-        Schedule updatedSchedule = scheduleService.updateScheduleAvailability(id, available);
-        if (updatedSchedule == null) {
-            return ResponseEntity.notFound().build();
-        }
-        return ResponseEntity.ok(updatedSchedule);
+    // Obtener todos los schedules
+    @GetMapping
+    public ResponseEntity<List<Schedule>> getAllSchedules() {
+        List<Schedule> schedules = scheduleService.getAllSchedules();
+        return new ResponseEntity<>(schedules, HttpStatus.OK);
     }
 
-    // Eliminar un horario
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteSchedule(@PathVariable Long id) {
-        boolean deleted = scheduleService.deleteSchedule(id);
-        if (!deleted) {
-            return ResponseEntity.notFound().build();
+    // Obtener un schedule por ID
+    @GetMapping("/{scheduleId}")
+    public ResponseEntity<Schedule> getScheduleById(@PathVariable Long scheduleId) {
+        Schedule schedule = scheduleService.getScheduleById(scheduleId);
+        if (schedule == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        return ResponseEntity.noContent().build();
+        return new ResponseEntity<>(schedule, HttpStatus.OK);
+    }
+
+    // Eliminar un schedule
+    @DeleteMapping("/{scheduleId}")
+    public ResponseEntity<Void> deleteSchedule(@PathVariable Long scheduleId) {
+        boolean isDeleted = scheduleService.deleteSchedule(scheduleId);
+        if (!isDeleted) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    // Actualizar un schedule
+    @PutMapping("/{scheduleId}")
+    public ResponseEntity<Schedule> updateSchedule(
+            @PathVariable Long scheduleId, 
+            @RequestBody Schedule updatedSchedule) {
+        
+        Schedule schedule = scheduleService.updateSchedule(scheduleId, updatedSchedule);
+        if (schedule == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(schedule, HttpStatus.OK);
     }
 }

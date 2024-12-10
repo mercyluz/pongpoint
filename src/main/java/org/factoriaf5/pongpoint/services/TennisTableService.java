@@ -14,31 +14,37 @@ public class TennisTableService {
     @Autowired
     private TennisTableRepository tennisTableRepository;
 
-    public List<TennisTable> getAllTables() {
-        return tennisTableRepository.findAll();
-    }
-
-    public Optional<TennisTable> getTableById(Long id) {
-        return tennisTableRepository.findById(id);
-    }
-
+    // Crear una nueva mesa de tenis
     public TennisTable createTennisTable(TennisTable tennisTable) {
         return tennisTableRepository.save(tennisTable);
     }
 
-    public TennisTable updateTennisTable(Long id, TennisTable tennisTableDetails) {
-        if (tennisTableRepository.existsById(id)) {
-            tennisTableDetails.setId(id);
-            return tennisTableRepository.save(tennisTableDetails);
-        }
-        return null;
+    // Obtener todas las mesas de tenis
+    public List<TennisTable> getAllTennisTables() {
+        return tennisTableRepository.findAll();
     }
 
+    // Obtener una mesa de tenis por ID
+    public TennisTable getTennisTableById(Long id) {
+        Optional<TennisTable> tennisTable = tennisTableRepository.findById(id);
+        return tennisTable.orElse(null);
+    }
+
+    // Eliminar una mesa de tenis
     public boolean deleteTennisTable(Long id) {
         if (tennisTableRepository.existsById(id)) {
             tennisTableRepository.deleteById(id);
             return true;
         }
         return false;
+    }
+
+    // Actualizar una mesa de tenis
+    public TennisTable updateTennisTable(Long id, TennisTable updatedTennisTable) {
+        if (tennisTableRepository.existsById(id)) {
+            updatedTennisTable.setId(id);
+            return tennisTableRepository.save(updatedTennisTable);
+        }
+        return null;
     }
 }

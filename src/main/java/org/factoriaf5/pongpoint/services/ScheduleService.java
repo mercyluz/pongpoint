@@ -8,50 +8,43 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 
-
 @Service
 public class ScheduleService {
 
     @Autowired
     private ScheduleRepository scheduleRepository;
 
-    // Obtener horarios disponibles para una mesa
-    public List<Schedule> getSchedulesByTable(Long tableId) {
-        return scheduleRepository.findByTableId(tableId);
+    // Crear un nuevo schedule
+    public Schedule createSchedule(Schedule schedule) {
+        return scheduleRepository.save(schedule);
     }
 
-    // Obtener un horario específico por su ID
+    // Obtener todos los schedules
+    public List<Schedule> getAllSchedules() {
+        return scheduleRepository.findAll();
+    }
+
+    // Obtener un schedule por ID
     public Schedule getScheduleById(Long id) {
-        return scheduleRepository.findById(id).orElse(null);
+        Optional<Schedule> schedule = scheduleRepository.findById(id);
+        return schedule.orElse(null);
     }
 
-    // Actualizar la disponibilidad de un horario
-    public Schedule updateScheduleAvailability(Long scheduleId, Boolean available) {
-        Schedule schedule = getScheduleById(scheduleId);
-        if (schedule != null) {
-            schedule.setAvailable(available);
-            return scheduleRepository.save(schedule);
+    // Eliminar un schedule
+    public boolean deleteSchedule(Long id) {
+        if (scheduleRepository.existsById(id)) {
+            scheduleRepository.deleteById(id);
+            return true;
+        }
+        return false;
+    }
+
+    // Actualizar un schedule
+    public Schedule updateSchedule(Long id, Schedule updatedSchedule) {
+        if (scheduleRepository.existsById(id)) {
+            updatedSchedule.setId(id);
+            return scheduleRepository.save(updatedSchedule);
         }
         return null;
-    }
-
-    public Schedule createOrUpdateSchedule(Schedule schedule) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'createOrUpdateSchedule'");
-    }
-
-    public boolean deleteSchedule(Long id) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'deleteSchedule'");
-    }
-
-    public List<Schedule> getAllSchedules() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getAllSchedules'");
-    }
-
-    public Schedule createSchedule(Schedule schedule) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'createSchedule'");
     }
 }

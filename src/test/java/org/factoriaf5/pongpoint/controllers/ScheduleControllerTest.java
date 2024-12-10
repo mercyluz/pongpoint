@@ -7,12 +7,14 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
-import java.time.LocalDate;
-import java.time.LocalTime;
+import java.time.LocalDateTime;
+import java.util.Arrays;
+import java.util.List;
 
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -28,40 +30,77 @@ public class ScheduleControllerTest {
 
     private MockMvc mockMvc;
 
-    private Schedule schedule;
-
     @BeforeEach
-    public void setUp() {
+    public void setup() {
         MockitoAnnotations.openMocks(this);
         mockMvc = MockMvcBuilders.standaloneSetup(scheduleController).build();
-        schedule = new Schedule(1L, LocalTime.of(10, 0), LocalTime.of(12, 0), LocalDate.of(2024, 12, 2));
     }
 
     @Test
-    public void testCreateOrUpdateSchedule() throws Exception {
-        when(scheduleService.createOrUpdateSchedule(schedule)).thenReturn(schedule);
+    public void testCreateSchedule() throws Exception {
+        Schedule schedule = new Schedule(LocalDateTime.now(), LocalDateTime.now().plusHours(1), true, null);
+        schedule.setId(1L);
 
-        mockMvc.perform(post("/schedules")
+        when(scheduleService.createSchedule(any(Schedule.class))).thenReturn(schedule);
+
+        mockMvc.perform(post("/api/schedules")
                 .contentType("application/json")
-                .content("{\"scheduleId\":1, \"startTime\":\"10:00\", \"endTime\":\"12:00\", \"date\":\"2024-12-02\"}"))
+                .content("{\"startDateTime\":\"2024-12-09T10:00:00\", \"endDateTime\":\"2024-12-09T11:00:00\", \"available\":true}"))
                 .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.scheduleId").value(1));
+                .andExpect(jsonPath("$.id").value(1));
+
+        verify(scheduleService, times(1)).createSchedule(any(Schedule.class));
+    }
+
+    @Test
+    public void testGetAllSchedules() throws Exception {
+        Schedule schedule1 = new Schedule(LocalDateTime.now(), LocalDateTime.now().plusHours(1), true, null);
+        Schedule schedule2 = new Schedule(LocalDateTime.now(), LocalDateTime.now().plusHours(2), true, null);
+        when(scheduleService.getAllSchedules()).thenReturn(Arrays.asList(schedule1, schedule2));
+
+        mockMvc.perform(get("/api/schedules"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$[0].id").value(1))
+                .andExpect(jsonPath("$[1].id").value(2));
+
+        verify(scheduleService, times(1)).getAllSchedules();
     }
 
     @Test
     public void testGetScheduleById() throws Exception {
-        when(scheduleService.getScheduleById(1L)).thenReturn(java.util.Optional.of(schedule));
+        Schedule schedule = new Schedule(LocalDateTime.now(), LocalDateTime.now().plusHours(1), true, null);
+        schedule.setId(1L);
+        when(scheduleService.getScheduleById(1L)).thenReturn(schedule);
 
-        mockMvc.perform(get("/schedules/1"))
+        mockMvc.perform(get("/api/schedules/1"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.scheduleId").value(1));
+                .andExpect(jsonPath("$.id").value(1));
+
+        verify(scheduleService, times(1)).getScheduleById(1L);
+    }
+
+    @Test
+    public void testUpdateSchedule() throws Exception {
+        Schedule schedule = new Schedule(LocalDateTime.now(), LocalDateTime.now().plusHours(1), true, null);
+        schedule.setId(1L);
+        when(scheduleService.updateSchedule(eq(1L), any(Schedule.class))).thenReturn(schedule);
+
+        mockMvc.perform(put("/api/schedules/1")
+                .contentType("application/json")
+                .content("{\"startDateTime\":\"2024-12-09T10:00:00\", \"endDateTime\":\"2024-12-09T11:00:00\", \"available\":true}"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id").value(1));
+
+        verify(scheduleService, times(1)).updateSchedule(eq(1L), any(Schedule.class));
     }
 
     @Test
     public void testDeleteSchedule() throws Exception {
-        doNothing().when(scheduleService).deleteSchedule(1L);
+        when(scheduleService.deleteSchedule(1L)).thenReturn(true);
 
-        mockMvc.perform(delete("/schedules/1"))
+        mockMvc.perform(delete("/api/schedules/1"))
                 .andExpect(status().isNoContent());
+
+        verify(scheduleService, times(1)).deleteSchedule(1L);
     }
 }
