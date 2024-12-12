@@ -30,7 +30,7 @@ Nos conectamos a la consola de H2
 ```
 tabla Shop
 <p align="center">
-  <img src= "https://github.com/mercyluz/ComputerShop/blob/main/tablashop.png"width=50% height=50%/>
+  <img src= "https://github.com/mercyluz/RockPaperScissor/blob/main/cliente.png"width=50% height=50%/>
 </p>
 tabla Computer
 <p align="center">
@@ -55,7 +55,7 @@ Para asegurarte de que todo está funcionando como se espera, puedes ejecutar la
 mvn test
 ```
 <p align="center">
-	   <img src= "https://github.com/mercyluz/RockPaperScissor/blob/main/testproyectopersonal.png"width=50% height=50%/>
+	   <img src= "https://github.com/mercyluz/RockPaperScissor/blob/main/testproyectopersonal.png"width=40% height=40%/>
 </p>
 
 
