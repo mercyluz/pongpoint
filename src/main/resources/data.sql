@@ -7,11 +7,17 @@
 -- Insertar Clientes
 INSERT INTO client (name, email) VALUES ('John Doe', 'johndoe@example.com');
 INSERT INTO client (name, email) VALUES ('Jane Smith', 'janesmith@example.com');
+INSERT INTO client (name, email) VALUES ('Robert Brown', 'robert.brown@example.com');
+INSERT INTO client (name, email) VALUES ('Emma White', 'emma.white@example.com');
+INSERT INTO client (name, email) VALUES ('James Miller', 'james.miller@example.com');
+INSERT INTO client (name, email) VALUES ('Sophia Davis', 'sophia.davis@example.com');
 
 -- Insertar Mesas
 INSERT INTO tables (name) VALUES ('Table 1');
 INSERT INTO tables (name) VALUES ('Table 2');
 INSERT INTO tables (name) VALUES ('Table 3');
+INSERT INTO tables (name) VALUES ('Table 4');
+INSERT INTO tables (name) VALUES ('Table 5');
 
 -- Insertar Horarios
 INSERT INTO schedule (start_date_time, end_date_time, available, table_id) 
@@ -33,6 +39,10 @@ INSERT INTO reservation (client_id, table_id, schedule_id, price, confirmed)
 VALUES (1, 1, 1, 100.0, TRUE);
 INSERT INTO reservation (client_id, table_id, schedule_id, price, confirmed) 
 VALUES (2, 2, 2, 120.0, TRUE);
+INSERT INTO reservation (client_id, table_id, schedule_id, price, confirmed) 
+VALUES (3, 3, 4, 120.0, TRUE);
+INSERT INTO reservation (client_id, table_id, schedule_id, price, confirmed) 
+VALUES (4, 1, 1, 120.0, TRUE);
 
 -- Insertar más reservas con precios ajustados para el fin de semana
 INSERT INTO reservation (client_id, table_id, schedule_id, price, confirmed) 

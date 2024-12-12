@@ -1,6 +1,6 @@
 package org.factoriaf5.pongpoint.models;
 
-
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -21,9 +21,9 @@ public class Client {
     private String name;
     private String email;
 
-    @OneToMany(mappedBy = "client")
+    @OneToMany(mappedBy = "client", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Reservation> reservations;
-
+   
     // Constructor vacío
     public Client() {}
 

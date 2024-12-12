@@ -4,80 +4,101 @@ import org.factoriaf5.pongpoint.models.Client;
 import org.factoriaf5.pongpoint.repositories.ClientRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
 import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import static org.mockito.Mockito.*;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.Optional;
 
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
+
 public class ClientServiceTest {
 
-    @InjectMocks
-    private ClientService clientService;  // El servicio que estamos probando
-
     @Mock
-    private ClientRepository clientRepository;  // El repositorio que es simulado
+    private ClientRepository clientRepository;
+
+    @InjectMocks
+    private ClientService clientService;
 
     private Client client;
 
     @BeforeEach
-    public void setUp() {
-        // Inicializar el objeto de cliente y mockear las dependencias
+    void setUp() {
         MockitoAnnotations.openMocks(this);
-        client = new Client();
-        client.setId(1L);
-        client.setName("Test Client");
-        client.setEmail("test@example.com");
+        client = new Client("John Doe", "john.doe@example.com");
     }
 
     @Test
-    public void testGetClientById_WhenClientExists() {
-        // Configurar el comportamiento del mock
-        when(clientRepository.findById(1L)).thenReturn(Optional.of(client));
+    void testCreateClient() {
+        when(clientRepository.save(any(Client.class))).thenReturn(client);
 
-        // Llamar al método del servicio
-        Client foundClient = clientService.getClientById(1L);
-
-        // Verificar el resultado
-        assertNotNull(foundClient);
-        assertEquals(client.getId(), foundClient.getId());
-        assertEquals(client.getName(), foundClient.getName());
-
-        // Verificar que se haya llamado una vez al método findById del repositorio
-        verify(clientRepository, times(1)).findById(1L);
-    }
-
-    @Test
-    public void testGetClientById_WhenClientDoesNotExist() {
-        // Configurar el comportamiento del mock para cuando no se encuentra el cliente
-        when(clientRepository.findById(1L)).thenReturn(Optional.empty());
-
-        // Llamar al método del servicio
-        Client foundClient = clientService.getClientById(1L);
-
-        // Verificar que no se haya encontrado el cliente
-        assertNull(foundClient);
-
-        // Verificar que se haya llamado una vez al método findById del repositorio
-        verify(clientRepository, times(1)).findById(1L);
-    }
-
-    @Test
-    public void testCreateClient() {
-        // Configurar el comportamiento del mock
-        when(clientRepository.save(client)).thenReturn(client);
-
-        // Llamar al método del servicio
         Client createdClient = clientService.createClient(client);
 
-        // Verificar el resultado
         assertNotNull(createdClient);
-        assertEquals(client.getName(), createdClient.getName());
+        assertEquals("John Doe", createdClient.getName());
+        verify(clientRepository, times(1)).save(any(Client.class));
+    }
 
-        // Verificar que se haya llamado una vez al método save del repositorio
-        verify(clientRepository, times(1)).save(client);
+    @Test
+    void testGetClientById() {
+        when(clientRepository.findById(1L)).thenReturn(Optional.of(client));
+
+        Client foundClient = clientService.getClientById(1L);
+
+        assertNotNull(foundClient);
+        assertEquals("John Doe", foundClient.getName());
+    }
+
+    @Test
+    void testGetClientByIdNotFound() {
+        when(clientRepository.findById(1L)).thenReturn(Optional.empty());
+
+        Client foundClient = clientService.getClientById(1L);
+
+        assertNull(foundClient);
+    }
+
+    @Test
+    void testUpdateClient() {
+        Client updatedClient = new Client("Jane Doe", "jane.doe@example.com");
+        updatedClient.setId(1L);
+        when(clientRepository.existsById(1L)).thenReturn(true);
+        when(clientRepository.save(updatedClient)).thenReturn(updatedClient);
+
+        Client result = clientService.updateClient(1L, updatedClient);
+
+        assertNotNull(result);
+        assertEquals("Jane Doe", result.getName());
+        verify(clientRepository, times(1)).save(updatedClient);
+    }
+
+    @Test
+    void testUpdateClientNotFound() {
+        Client updatedClient = new Client("Jane Doe", "jane.doe@example.com");
+        when(clientRepository.existsById(1L)).thenReturn(false);
+
+        Client result = clientService.updateClient(1L, updatedClient);
+
+        assertNull(result);
+    }
+
+    @Test
+    void testDeleteClient() {
+        when(clientRepository.existsById(1L)).thenReturn(true);
+
+        boolean result = clientService.deleteClient(1L);
+
+        assertTrue(result);
+        verify(clientRepository, times(1)).deleteById(1L);
+    }
+
+    @Test
+    void testDeleteClientNotFound() {
+        when(clientRepository.existsById(1L)).thenReturn(false);
+
+        boolean result = clientService.deleteClient(1L);
+
+        assertFalse(result);
     }
 }

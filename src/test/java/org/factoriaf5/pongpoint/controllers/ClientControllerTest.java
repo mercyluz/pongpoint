@@ -1,110 +1,122 @@
 package org.factoriaf5.pongpoint.controllers;
 
 import org.factoriaf5.pongpoint.models.Client;
-import org.factoriaf5.pongpoint.repositories.ClientRepository;
+import org.factoriaf5.pongpoint.services.ClientService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
-import org.springframework.http.HttpStatus;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MvcResult;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import org.springframework.web.context.WebApplicationContext;
 
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-import java.util.Arrays;
-import java.util.Optional;
+import java.util.List;
 
+@WebMvcTest(ClientController.class)
 public class ClientControllerTest {
 
+    @Autowired
     private MockMvc mockMvc;
 
     @Mock
-    private ClientRepository clientRepository; // Simulación del repositorio
+    private ClientService clientService;
 
     @InjectMocks
-    private ClientController clientController; // El controlador que estamos probando
+    private ClientController clientController;
 
     private Client client;
 
     @BeforeEach
-    public void setUp() {
-        MockitoAnnotations.openMocks(this);
-        mockMvc = MockMvcBuilders.standaloneSetup(clientController).build();
-        
-        // Crear un cliente para las pruebas
-        client = new Client();
-        client.setId(1L);
-        client.setName("John Doe");
-        client.setEmail("john.doe@example.com");
+    void setUp() {
+        client = new Client("John Doe", "john.doe@example.com");
     }
 
     @Test
-    public void testGetAllClients() throws Exception {
-        // Simular la respuesta del repositorio
-        when(clientRepository.findAll()).thenReturn(Arrays.asList(client));
+    void testCreateClient() throws Exception {
+        when(clientService.createClient(any(Client.class))).thenReturn(client);
 
-        // Realizar la solicitud GET
-        MvcResult result = mockMvc.perform(get("/api/clients"))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$[0].id").value(1))
-                .andExpect(jsonPath("$[0].name").value("John Doe"))
-                .andExpect(jsonPath("$[0].email").value("john.doe@example.com"))
-                .andReturn();
-
-        // Verificar que el repositorio fue llamado
-        verify(clientRepository, times(1)).findAll();
-    }
-
-    @Test
-    public void testGetClientById_Found() throws Exception {
-        // Simular la respuesta del repositorio
-        when(clientRepository.findById(1L)).thenReturn(Optional.of(client));
-
-        // Realizar la solicitud GET por ID
-        mockMvc.perform(get("/api/clients/1"))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id").value(1))
+        mockMvc.perform(post("/api/clients")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"name\":\"John Doe\", \"email\":\"john.doe@example.com\"}"))
+                .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.name").value("John Doe"))
                 .andExpect(jsonPath("$.email").value("john.doe@example.com"));
 
-        // Verificar que el repositorio fue llamado
-        verify(clientRepository, times(1)).findById(1L);
+        verify(clientService, times(1)).createClient(any(Client.class));
     }
 
     @Test
-    public void testGetClientById_NotFound() throws Exception {
-        // Simular que no se encuentra un cliente con ese ID
-        when(clientRepository.findById(1L)).thenReturn(Optional.empty());
+    void testGetAllClients() throws Exception {
+        when(clientService.getAllClients()).thenReturn(List.of(client));
 
-        // Realizar la solicitud GET por ID
+        mockMvc.perform(get("/api/clients"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$[0].name").value("John Doe"))
+                .andExpect(jsonPath("$[0].email").value("john.doe@example.com"));
+
+        verify(clientService, times(1)).getAllClients();
+    }
+
+    @Test
+    void testGetClientById() throws Exception {
+        when(clientService.getClientById(1L)).thenReturn(client);
+
+        mockMvc.perform(get("/api/clients/1"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.name").value("John Doe"))
+                .andExpect(jsonPath("$.email").value("john.doe@example.com"));
+
+        verify(clientService, times(1)).getClientById(1L);
+    }
+
+    @Test
+    void testGetClientByIdNotFound() throws Exception {
+        when(clientService.getClientById(1L)).thenReturn(null);
+
         mockMvc.perform(get("/api/clients/1"))
                 .andExpect(status().isNotFound());
 
-        // Verificar que el repositorio fue llamado
-        verify(clientRepository, times(1)).findById(1L);
+        verify(clientService, times(1)).getClientById(1L);
     }
 
     @Test
-    public void testCreateClient() throws Exception {
-        // Simular que el repositorio guarda el cliente
-        when(clientRepository.save(any(Client.class))).thenReturn(client);
+    void testUpdateClient() throws Exception {
+        Client updatedClient = new Client("Jane Doe", "jane.doe@example.com");
+        updatedClient.setId(1L);
+        when(clientService.updateClient(eq(1L), any(Client.class))).thenReturn(updatedClient);
 
-        // Realizar la solicitud POST
-        mockMvc.perform(post("/api/clients")
-                .contentType("application/json")
-                .content("{\"name\":\"John Doe\",\"email\":\"john.doe@example.com\"}"))
-                .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.id").value(1))
-                .andExpect(jsonPath("$.name").value("John Doe"))
-                .andExpect(jsonPath("$.email").value("john.doe@example.com"));
+        mockMvc.perform(put("/api/clients/1")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"name\":\"Jane Doe\", \"email\":\"jane.doe@example.com\"}"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.name").value("Jane Doe"))
+                .andExpect(jsonPath("$.email").value("jane.doe@example.com"));
 
-        // Verificar que el repositorio fue llamado
-        verify(clientRepository, times(1)).save(any(Client.class));
+        verify(clientService, times(1)).updateClient(eq(1L), any(Client.class));
+    }
+
+    @Test
+    void testDeleteClient() throws Exception {
+        when(clientService.deleteClient(1L)).thenReturn(true);
+
+        mockMvc.perform(delete("/api/clients/1"))
+                .andExpect(status().isNoContent());
+
+        verify(clientService, times(1)).deleteClient(1L);
+    }
+
+    @Test
+    void testDeleteClientNotFound() throws Exception {
+        when(clientService.deleteClient(1L)).thenReturn(false);
+
+        mockMvc.perform(delete("/api/clients/1"))
+                .andExpect(status().isNotFound());
+
+        verify(clientService, times(1)).deleteClient(1L);
     }
 }
