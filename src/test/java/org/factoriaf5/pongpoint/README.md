@@ -1,4 +1,4 @@
-## Pong Pont 
+## Pong Point 
 
 ## Descripción
 
@@ -6,7 +6,7 @@ Api programa donde puedes elliminar , actualizar, añadir, listar una reserva de
 
 
 <p align="center">
-	  <img src= "https://github.com/mercyluz/ComputerShop/blob/main/computershop.png"width=40% height=40%/>
+	  <img src= "https://github.com/mercyluz/RockPaperScissor/blob/main/logo.png"width=40% height=40%/>
 </p>
 
 
@@ -28,13 +28,14 @@ Nos conectamos a la consola de H2
 ```bash
 # http://localhost:8080/h2-console
 ```
-tabla Shop
+tablas Poingpoint 
 <p align="center">
   <img src= "https://github.com/mercyluz/RockPaperScissor/blob/main/cliente.png"width=50% height=50%/>
+	
 </p>
-tabla Computer
+tablas 
 <p align="center">
-	  <img src= "https://github.com/mercyluz/ComputerShop/blob/main/tablacomputer.png"width=50% height=50%/>
+	  <img src= "https://github.com/mercyluz/RockPaperScissor/blob/main/alltables.png"width=50% height=50%/>
 
 
 
