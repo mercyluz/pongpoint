@@ -15,7 +15,11 @@ public class ClientService {
     private ClientRepository clientRepository;
 
     // Crear un nuevo cliente
-    public Client createClient(Client client) {
+    public Client createClient(Client client) throws IllegalAccessException {
+        
+        if (client.getId() != null && !String.valueOf(client.getId()).isEmpty()) {
+            throw new IllegalAccessException("Id cannot be auto assigned");
+        }
         return clientRepository.save(client);
     }
 

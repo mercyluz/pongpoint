@@ -11,6 +11,10 @@ import jakarta.persistence.Table;
 
 import java.time.LocalTime;
 import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
@@ -28,10 +32,12 @@ public class Schedule {
     private Boolean available;
 
     @ManyToOne
+    @JsonBackReference
     @JoinColumn(name = "table_id")
     private TennisTable table;
 
     @OneToMany(mappedBy = "schedule")
+    @JsonManagedReference
     private List<Reservation> reservations;
 
     // Constructor vacío

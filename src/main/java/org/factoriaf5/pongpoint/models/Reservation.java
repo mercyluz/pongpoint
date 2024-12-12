@@ -9,6 +9,7 @@ import jakarta.persistence.Table;
 import jakarta.persistence.JoinColumn;
 import java.time.LocalDateTime;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
@@ -20,15 +21,17 @@ public class Reservation {
     private Long id;
 
     @ManyToOne
-    @JsonIgnore 
+   @JsonBackReference 
     @JoinColumn(name = "client_id")
     private Client client;
 
     @ManyToOne
+    @JsonBackReference
     @JoinColumn(name = "table_id")
     private TennisTable table;
 
     @ManyToOne
+    @JsonBackReference
     @JoinColumn(name = "schedule_id")
     private Schedule schedule;
 
