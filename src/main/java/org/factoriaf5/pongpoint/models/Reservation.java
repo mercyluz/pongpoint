@@ -9,6 +9,8 @@ import jakarta.persistence.Table;
 import jakarta.persistence.JoinColumn;
 import java.time.LocalDateTime;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 @Table(name = "reservation")  // Especificamos el nombre de la tabla en la base de datos
 public class Reservation {
@@ -18,6 +20,7 @@ public class Reservation {
     private Long id;
 
     @ManyToOne
+    @JsonIgnore 
     @JoinColumn(name = "client_id")
     private Client client;
 

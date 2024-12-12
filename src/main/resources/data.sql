@@ -5,12 +5,12 @@
 --INSERT INTO Users (name, email, role) VALUES ('Laura Garcia', 'lauragarcia@example.com', 'USER');
 --INSERT INTO Users (name, email, role) VALUES ('Antonio Ruiz', 'antonioruiz@example.com', 'USER');
 -- Insertar Clientes
-INSERT INTO client (name, email) VALUES ('John Doe', 'johndoe@example.com');
-INSERT INTO client (name, email) VALUES ('Jane Smith', 'janesmith@example.com');
-INSERT INTO client (name, email) VALUES ('Robert Brown', 'robert.brown@example.com');
-INSERT INTO client (name, email) VALUES ('Emma White', 'emma.white@example.com');
-INSERT INTO client (name, email) VALUES ('James Miller', 'james.miller@example.com');
-INSERT INTO client (name, email) VALUES ('Sophia Davis', 'sophia.davis@example.com');
+--INSERT INTO client (name, email) VALUES ('John Doe', 'johndoe@example.com');
+INSERT INTO client (id, name, email) VALUES (default, 'Jane Smith', 'janesmith@example.com');
+INSERT INTO client (id, name, email) VALUES (default, 'Robert Brown', 'robert.brown@example.com');
+INSERT INTO client (id, name, email) VALUES (default,'Emma White', 'emma.white@example.com');
+INSERT INTO client (id, name, email) VALUES (default, 'James Miller', 'james.miller@example.com');
+INSERT INTO client (id, name, email) VALUES (default, 'Sophia Davis', 'sophia.davis@example.com');
 
 -- Insertar Mesas
 INSERT INTO tables (name) VALUES ('Table 1');
