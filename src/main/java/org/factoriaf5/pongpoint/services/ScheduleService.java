@@ -14,23 +14,23 @@ public class ScheduleService {
     @Autowired
     private ScheduleRepository scheduleRepository;
 
-    // Crear un nuevo schedule
+   
     public Schedule createSchedule(Schedule schedule) {
         return scheduleRepository.save(schedule);
     }
 
-    // Obtener todos los schedules
+  
     public List<Schedule> getAllSchedules() {
         return scheduleRepository.findAll();
     }
 
-    // Obtener un schedule por ID
+   
     public Schedule getScheduleById(Long id) {
         Optional<Schedule> schedule = scheduleRepository.findById(id);
         return schedule.orElse(null);
     }
 
-    // Eliminar un schedule
+
     public boolean deleteSchedule(Long id) {
         if (scheduleRepository.existsById(id)) {
             scheduleRepository.deleteById(id);
@@ -39,7 +39,7 @@ public class ScheduleService {
         return false;
     }
 
-    // Actualizar un schedule
+   
     public Schedule updateSchedule(Long id, Schedule updatedSchedule) {
         if (scheduleRepository.existsById(id)) {
             updatedSchedule.setId(id);

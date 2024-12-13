@@ -20,7 +20,7 @@ import java.time.LocalDateTime;
 
 
 @Entity
-@Table(name = "schedule")  // Especificamos el nombre de la tabla en la base de datos
+@Table(name = "schedule")  
 public class Schedule {
 
     @Id
@@ -40,10 +40,9 @@ public class Schedule {
     @JsonManagedReference
     private List<Reservation> reservations;
 
-    // Constructor vacío
+ 
     public Schedule() {}
 
-    // Constructor con parámetros
     public Schedule(LocalDateTime startDateTime, LocalDateTime endDateTime, Boolean available, TennisTable table) {
         this.startDateTime = startDateTime;
         this.endDateTime = endDateTime;
@@ -51,7 +50,6 @@ public class Schedule {
         this.table = table;
     }
 
-    // Getters y Setters
     public Long getId() {
         return id;
     }

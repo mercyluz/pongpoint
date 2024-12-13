@@ -16,21 +16,21 @@ public class ReservationController {
     @Autowired
     private ReservationService reservationService;
 
-    // Crear una nueva reserva
+    
     @PostMapping
     public ResponseEntity<Reservation> createReservation(@RequestBody Reservation reservation) {
         Reservation newReservation = reservationService.createReservation(reservation);
         return new ResponseEntity<>(newReservation, HttpStatus.CREATED);
     }
 
-    // Obtener todas las reservas
+ 
     @GetMapping
     public ResponseEntity<List<Reservation>> getAllReservations() {
         List<Reservation> reservations = reservationService.getAllReservations();
         return new ResponseEntity<>(reservations, HttpStatus.OK);
     }
 
-    // Obtener una reserva por ID
+ 
     @GetMapping("/{reservationId}")
     public ResponseEntity<Reservation> getReservationById(@PathVariable Long reservationId) {
         Reservation reservation = reservationService.getReservationById(reservationId);
@@ -40,7 +40,7 @@ public class ReservationController {
         return new ResponseEntity<>(reservation, HttpStatus.OK);
     }
 
-    // Eliminar una reserva
+  
     @DeleteMapping("/{reservationId}")
     public ResponseEntity<Void> deleteReservation(@PathVariable Long reservationId) {
         boolean isDeleted = reservationService.deleteReservation(reservationId);
@@ -50,7 +50,7 @@ public class ReservationController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    // Actualizar una reserva
+
     @PutMapping("/{reservationId}")
     public ResponseEntity<Reservation> updateReservation(
             @PathVariable Long reservationId, 

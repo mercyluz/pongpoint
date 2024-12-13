@@ -38,10 +38,10 @@ public class Reservation {
     private Double price;
     private Boolean confirmed;
 
-    // Constructor vacío
+    
     public Reservation() {}
 
-    // Constructor con parámetros
+
     public Reservation(Client client, TennisTable table2, Schedule schedule, Double price) {
         this.client = client;
         this.table = table2;
@@ -50,7 +50,6 @@ public class Reservation {
         this.confirmed = true;
     }
 
-    // Getters y Setters
     public Long getId() {
         return id;
     }

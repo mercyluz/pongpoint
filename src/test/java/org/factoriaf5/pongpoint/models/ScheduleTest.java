@@ -18,13 +18,13 @@ public class ScheduleTest {
 
     @BeforeEach
     public void setUp() {
-        // Creamos mocks de las dependencias
+     
         mockTable = mock(TennisTable.class);
 
-        // Creamos la instancia de Schedule
+        
         schedule = new Schedule(LocalDateTime.now(), LocalDateTime.now().plusHours(1), true, mockTable);
 
-        // También podemos crear una lista de reservas
+       
         mockReservation = mock(Reservation.class);
         List<Reservation> reservations = new ArrayList<>();
         reservations.add(mockReservation);

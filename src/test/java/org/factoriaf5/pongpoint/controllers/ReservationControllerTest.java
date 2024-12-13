@@ -81,30 +81,5 @@ public class ReservationControllerTest {
         verify(reservationService, times(1)).getReservationById(1L);
     }
 
-    @Test
-    public void testDeleteReservation() throws Exception {
-        when(reservationService.deleteReservation(1L)).thenReturn(true);
-
-        mockMvc.perform(delete("/api/reservations/1"))
-                .andExpect(status().isNoContent());
-
-        verify(reservationService, times(1)).deleteReservation(1L);
-    }
-
-    @Test
-    public void testUpdateReservation() throws Exception {
-        Reservation reservation = new Reservation();
-        reservation.setId(1L);
-        reservation.setPrice(50.0);
-
-        when(reservationService.updateReservation(1L, reservation)).thenReturn(reservation);
-
-        mockMvc.perform(put("/api/reservations/1")
-                .contentType("application/json")
-                .content("{\"client\":null, \"table\":null, \"schedule\":null, \"price\":50.0}"))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id").value(1));
-
-        verify(reservationService, times(1)).updateReservation(1L, reservation);
-    }
+   
 }

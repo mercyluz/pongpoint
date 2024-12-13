@@ -1,5 +1,6 @@
 package org.factoriaf5.pongpoint.services;
 
+import org.factoriaf5.pongpoint.DTOS.ClientDTO;
 import org.factoriaf5.pongpoint.models.Client;
 import org.factoriaf5.pongpoint.repositories.ClientRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +15,7 @@ public class ClientService {
     @Autowired
     private ClientRepository clientRepository;
 
-    // Crear un nuevo cliente
+   
     public Client createClient(Client client) throws IllegalAccessException {
         
         if (client.getId() != null && !String.valueOf(client.getId()).isEmpty()) {
@@ -23,32 +24,37 @@ public class ClientService {
         return clientRepository.save(client);
     }
 
-    // Obtener todos los clientes
+  
     public List<Client> getAllClients() {
         return clientRepository.findAll();
     }
 
-    // Obtener un cliente por ID
+   
     public Client getClientById(Long clientId) {
         Optional<Client> client = clientRepository.findById(clientId);
         return client.orElse(null);
     }
 
-    // Actualizar un cliente
+   
     public Client updateClient(Long clientId, Client updatedClient) {
         if (!clientRepository.existsById(clientId)) {
-            return null; // Si el cliente no existe
+            return null; 
         }
-        updatedClient.setId(clientId); // Asegurarse de mantener el ID correcto
+        updatedClient.setId(clientId); 
         return clientRepository.save(updatedClient);
     }
 
-    // Eliminar un cliente
+    
     public boolean deleteClient(Long clientId) {
         if (!clientRepository.existsById(clientId)) {
-            return false; // El cliente no existe
+            return false; 
         }
         clientRepository.deleteById(clientId);
         return true;
+    }
+
+    public ClientDTO convertToDTO(Client client) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'convertToDTO'");
     }
 }

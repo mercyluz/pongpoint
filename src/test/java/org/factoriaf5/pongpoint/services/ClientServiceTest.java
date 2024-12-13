@@ -36,14 +36,14 @@ public class ClientServiceTest {
 
     @Test
     public void testCreateClient_Success() throws IllegalAccessException {
-        // Simula el comportamiento de save() del repositorio
+        
         when(clientRepository.save(client)).thenReturn(client);
 
         Client result = clientService.createClient(client);
 
-        assertNotNull(result); // Asegúrate de que el cliente no sea nulo
-        assertEquals("John Doe", result.getName()); // Verifica que el nombre sea el esperado
-        verify(clientRepository, times(1)).save(client); // Verifica que save() fue llamado una vez
+        assertNotNull(result); 
+        assertEquals("John Doe", result.getName()); 
+        verify(clientRepository, times(1)).save(client); // Verifi save() fue llamado una vez
     }
 
     @Test
@@ -96,14 +96,14 @@ public class ClientServiceTest {
         Client updatedClient = new Client();
         updatedClient.setName("Jane Doe");
 
-        // Simula que el cliente existe en el repositorio
+       
         when(clientRepository.existsById(1L)).thenReturn(true);
         when(clientRepository.save(updatedClient)).thenReturn(updatedClient);
 
         Client result = clientService.updateClient(1L, updatedClient);
 
         assertNotNull(result);
-        assertEquals("Jane Doe", result.getName()); // Verifica que el nombre se haya actualizado
+        assertEquals("Jane Doe", result.getName()); 
     }
 
     @Test
@@ -111,33 +111,33 @@ public class ClientServiceTest {
         Client updatedClient = new Client();
         updatedClient.setName("Jane Doe");
 
-        // Simula que el cliente no existe
+     
         when(clientRepository.existsById(1L)).thenReturn(false);
 
         Client result = clientService.updateClient(1L, updatedClient);
 
-        assertNull(result); // Verifica que el cliente no fue actualizado
+        assertNull(result); 
     }
 
     @Test
     public void testDeleteClient_Success() {
-        // Simula que el cliente existe
+    
         when(clientRepository.existsById(1L)).thenReturn(true);
 
         boolean result = clientService.deleteClient(1L);
 
-        assertTrue(result); // Verifica que la eliminación fue exitosa
-        verify(clientRepository, times(1)).deleteById(1L); // Verifica que el repositorio haya sido llamado para eliminar el cliente
+        assertTrue(result); 
+        verify(clientRepository, times(1)).deleteById(1L); 
     }
 
     @Test
     public void testDeleteClient_NotFound() {
-        // Simula que el cliente no existe
+      
         when(clientRepository.existsById(1L)).thenReturn(false);
 
         boolean result = clientService.deleteClient(1L);
 
-        assertFalse(result); // Verifica que la eliminación falló
-        verify(clientRepository, never()).deleteById(1L); // Verifica que el repositorio no fue llamado
+        assertFalse(result); 
+        verify(clientRepository, never()).deleteById(1L); 
     }
 }

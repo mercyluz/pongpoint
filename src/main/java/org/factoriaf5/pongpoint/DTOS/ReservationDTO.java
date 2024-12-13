@@ -10,10 +10,10 @@ public class ReservationDTO {
     private Long scheduleId;
     private Double price;
 
-    // Constructor vacío
+  
     public ReservationDTO() {}
 
-    // Constructor con parámetros
+   
     public ReservationDTO(Long clientId, Long tableId, Long scheduleId, Double price) {
         this.clientId = clientId;
         this.tableId = tableId;
@@ -21,7 +21,7 @@ public class ReservationDTO {
         this.price = price;
     }
 
-    // Getters y Setters
+
     public Long getClientId() {
         return clientId;
     }

@@ -15,7 +15,7 @@ public class ClientTest {
 
     @BeforeEach
     public void setUp() {
-        // Inicializa el cliente antes de cada test
+       
         client = new Client("John Doe", "johndoe@example.com");
     }
 

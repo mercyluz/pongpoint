@@ -26,19 +26,18 @@ public class Client {
 
     @OneToMany(mappedBy = "client", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnore
-    //@JsonManagedReference
+   
     private List<Reservation> reservations;
    
-    // Constructor vacío
+   
     public Client() {}
 
-    // Constructor con parámetros
     public Client(String name, String email) {
         this.name = name;
         this.email = email;
     }
 
-    // Getters y Setters
+    
     public Long getId() {
         return id;
     }

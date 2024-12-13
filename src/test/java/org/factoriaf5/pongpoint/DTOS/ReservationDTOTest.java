@@ -26,16 +26,16 @@ public class ReservationDTOTest {
 
     @Test
     void testSetters() {
-        // Arrange
+     
         ReservationDTO reservationDTO = new ReservationDTO();
 
-        // Act
+        
         reservationDTO.setClientId(1L);
         reservationDTO.setTableId(2L);
         reservationDTO.setScheduleId(3L);
         reservationDTO.setPrice(100.0);
 
-        // Assert
+     
         assertEquals(1L, reservationDTO.getClientId());
         assertEquals(2L, reservationDTO.getTableId());
         assertEquals(3L, reservationDTO.getScheduleId());
@@ -44,10 +44,10 @@ public class ReservationDTOTest {
 
     @Test
     void testEmptyConstructor() {
-        // Arrange
+     
         ReservationDTO reservationDTO = new ReservationDTO();
 
-        // Act & Assert
+        
         assertNull(reservationDTO.getClientId());
         assertNull(reservationDTO.getTableId());
         assertNull(reservationDTO.getScheduleId());

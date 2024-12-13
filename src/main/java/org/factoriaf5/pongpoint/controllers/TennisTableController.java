@@ -16,21 +16,20 @@ public class TennisTableController {
     @Autowired
     private TennisTableService tennisTableService;
 
-    // Crear una nueva mesa de tenis
+ 
     @PostMapping
     public ResponseEntity<TennisTable> createTennisTable(@RequestBody TennisTable tennisTable) {
         TennisTable newTable = tennisTableService.createTennisTable(tennisTable);
         return new ResponseEntity<>(newTable, HttpStatus.CREATED);
     }
 
-    // Obtener todas las mesas de tenis
     @GetMapping
     public ResponseEntity<List<TennisTable>> getAllTennisTables() {
         List<TennisTable> tennisTables = tennisTableService.getAllTennisTables();
         return new ResponseEntity<>(tennisTables, HttpStatus.OK);
     }
 
-    // Obtener una mesa de tenis por ID
+  
     @GetMapping("/{tableId}")
     public ResponseEntity<TennisTable> getTennisTableById(@PathVariable Long tableId) {
         TennisTable tennisTable = tennisTableService.getTennisTableById(tableId);
@@ -40,7 +39,6 @@ public class TennisTableController {
         return new ResponseEntity<>(tennisTable, HttpStatus.OK);
     }
 
-    // Eliminar una mesa de tenis
     @DeleteMapping("/{tableId}")
     public ResponseEntity<Void> deleteTennisTable(@PathVariable Long tableId) {
         boolean isDeleted = tennisTableService.deleteTennisTable(tableId);
@@ -50,7 +48,6 @@ public class TennisTableController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    // Actualizar una mesa de tenis
     @PutMapping("/{tableId}")
     public ResponseEntity<TennisTable> updateTennisTable(
             @PathVariable Long tableId, 
