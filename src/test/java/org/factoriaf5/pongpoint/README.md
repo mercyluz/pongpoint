@@ -37,6 +37,21 @@ tablas
 <p align="center">
 	  <img src= "https://github.com/mercyluz/RockPaperScissor/blob/main/alltables.png"width=50% height=50%/>
 
+## End points
+
+
+```bash
+# http://localhost:8080/h2-console
+```
+tablas Poingpoint 
+<p align="center">
+  <img src= "https://github.com/mercyluz/RockPaperScissor/blob/main/cliente.png"width=50% height=50%/>
+	
+</p>
+tablas 
+<p align="center">
+	  <img src= "https://github.com/mercyluz/RockPaperScissor/blob/main/alltables.png"width=50% height=50%/>
+
 
 
 ## Diagrama UML
