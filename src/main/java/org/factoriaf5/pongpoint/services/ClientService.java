@@ -30,14 +30,16 @@ public class ClientService {
         return client.orElse(null);
     }
 
-    // Actualizar un cliente
-    public Client updateClient(Long clientId, Client updatedClient) {
+      // Actualizar un cliente
+      public Client updateClient(Long clientId, Client updatedClient) {
         if (!clientRepository.existsById(clientId)) {
             return null; // Si el cliente no existe
         }
         updatedClient.setId(clientId); // Asegurarse de mantener el ID correcto
         return clientRepository.save(updatedClient);
     }
+
+    
 
     // Eliminar un cliente
     public boolean deleteClient(Long clientId) {

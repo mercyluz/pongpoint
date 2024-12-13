@@ -41,18 +41,17 @@ public class ClientController {
     }
 
     // Actualizar un cliente por ID
+    
+    // Actualizar un cliente
     @PutMapping("/{clientId}")
     public ResponseEntity<Client> updateClient(
-            @PathVariable Long clientId,
-            @RequestBody Client updatedClient) {
-
+            @PathVariable Long clientId, @RequestBody Client updatedClient) {
         Client client = clientService.updateClient(clientId, updatedClient);
         if (client == null) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND); // Cliente no encontrado
         }
         return new ResponseEntity<>(client, HttpStatus.OK);
     }
-
     // Eliminar un cliente por ID
     @DeleteMapping("/{clientId}")
     public ResponseEntity<Void> deleteClient(@PathVariable Long clientId) {
